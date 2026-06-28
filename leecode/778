@@ -1,0 +1,37 @@
+class Solution {
+    
+    public int swimInWater(int[][] grid) {
+       int n=grid.length;
+       int m = grid[0].length;
+       if(n==1 && m==1) return 0;
+       int [][] distance = new int[n][m];
+       for(int i=0;i<n; i++){
+        Arrays.fill(distance[i],Integer.MAX_VALUE);
+       }
+       int[][] dir = {{1,0},{0,1},{-1,0},{0,-1}};
+       PriorityQueue<int [] > pq = new PriorityQueue<>((a,b)->a[2]-b[2]);
+       pq.offer(new int[]{0,0,grid[0][0]});
+       while(!pq.isEmpty()){
+        int [] curr = pq.poll();
+        int i = curr[0];
+        int j = curr[1];
+        int time = curr[2];
+        if(distance[i][j]<time) continue;
+
+        for(int d=0; d<4; d++){
+            int newi = i+dir[d][0];
+            int newj = j+dir[d][1];
+            if(newi>-1 && newj>-1 && newi<n && newj<m){
+                int newtime = Math.max(time,grid[newi][newj]);
+                if(newtime<distance[newi][newj]){
+                    distance[newi][newj]=newtime;
+                    pq.offer(new int[]{newi,newj,newtime});
+                }
+            }
+        }
+       }
+
+        return distance[n-1][m-1];
+    }
+
+}
