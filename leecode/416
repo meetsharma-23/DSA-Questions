@@ -1,0 +1,22 @@
+class Solution {
+    public boolean helper(int idx, int sum, int[] nums,Boolean[][]dp){
+        if(sum<0) return false;
+        if(idx == nums.length){
+            return sum==0;
+        }
+        if(dp[idx][sum]!=null) return dp[idx][sum];
+        
+        boolean pick1 = helper(idx+1,sum-nums[idx], nums,dp);
+        boolean skip = helper(idx+1,sum, nums,dp);
+
+        return dp[idx][sum]=pick1||skip;
+    }
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+
+        for(int num : nums) sum+=num;
+        if(sum%2==1) return false;
+        Boolean [][]dp = new Boolean[nums.length][(sum/2)+1];
+        return helper(0,sum/2,nums,dp);
+    }
+}
