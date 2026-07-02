@@ -1,0 +1,51 @@
+//              REcursive solution with memoization
+
+
+// class Solution {
+//     private int helper(String t1, String t2, int i1, int i2,Integer[][] dp ){
+//         if(i1==-1||i2==-1) return 0;
+//         if(dp[i1][i2]!=null) return dp[i1][i2];
+//         int both = Integer.MIN_VALUE, len1=Integer.MIN_VALUE,len2=Integer.MIN_VALUE;
+//         char c1 = t1.charAt(i1);
+//         char c2 = t2.charAt(i2);
+//         if(c1==c2){
+//             both = 1+ helper(t1,t2,i1-1,i2-1,dp);
+//         }
+//         else {
+//             len1= helper(t1,t2,i1-1,i2,dp);
+//             len2 = helper(t1,t2,i1,i2-1,dp);
+//         }
+//         return dp[i1][i2]=Math.max(both,Math.max(len1,len2));
+//     }
+//     public int longestCommonSubsequence(String text1, String text2) {
+//         int len1 = text1.length(), len2=text2.length();
+//         Integer[][] dp = new Integer[len1][len2];
+//         return helper(text1,text2,len1-1,len2-1,dp);
+//     }
+// }
+
+//               Tabulation solution
+
+class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        int len1 = text1.length();
+        int len2 = text2.length();
+        int [][]dp = new int[len1+1][len2+1];
+
+
+        for(int i=1; i<=len1; i++){
+            char c1 = text1.charAt(i-1);
+            for(int j=1; j<=len2; j++){
+                char c2 = text2.charAt(j-1);
+                if(c1==c2){
+                    dp[i][j] = 1+dp[i-1][j-1];
+                }
+                else {
+                    dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+                }
+            }
+        }
+
+        return dp[len1][len2];
+    }
+}
