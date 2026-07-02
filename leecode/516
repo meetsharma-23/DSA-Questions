@@ -1,0 +1,44 @@
+class Solution {
+
+    //            Recursive solution with memoization
+
+    // public int lcs (int start, int end, String s, Integer[][] dp){
+    //     if(start == end) return 1;
+    //     if(start>end) return 0;
+    //     if(dp[start][end]!= null) return dp[start][end];
+
+    //     char cS = s.charAt(start);
+    //     char cE = s.charAt(end);
+
+    //     if(cS == cE) return dp[start][end] = 2+lcs(start+1, end-1, s, dp);
+
+    //     return dp[start][end]=Math.max(lcs(start+1,end, s, dp), lcs(start,end-1,s,dp));
+    // }
+
+
+    public int longestPalindromeSubseq(String s) {
+        //  tabulation solution
+        
+        int len = s.length();
+        int [][] dp = new int[len][len];
+        for(int i=0; i<len; i++){
+            dp[i][i]=1;
+        }
+
+        for(int i=len-1; i>-1; i--){
+            char c1 = s.charAt(i);
+            for(int j=i+1; j<len; j++){
+                char c2 = s.charAt(j);
+                if(c1==c2){
+                    dp[i][j] = 2+dp[i+1][j-1];
+                }
+                else{
+                    dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);
+                }
+            }
+
+        }
+
+        return dp[0][len-1];
+    }
+}
