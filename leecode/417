@@ -1,0 +1,72 @@
+class Solution {
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        Queue<int[]> pacific = new LinkedList<>();
+        Queue<int[]> atlantic = new LinkedList<>();
+
+        int row = heights.length;
+        int col = heights[0].length;
+
+        int [][] p = new int[row][col];
+        int [][] a = new int[row][col];
+
+        for(int i=0; i<row; i++){
+            pacific.offer(new int[]{i,0});
+            p[i][0] = 1;
+            atlantic.offer(new int[]{i,col-1});
+            a[i][col-1]=1;
+        }
+
+        for(int j=1; j<col ; j++){
+            pacific.offer(new int[]{0,j});
+            p[0][j]=1;
+            atlantic.offer(new int[]{row-1,j-1});
+            a[row-1][j-1] = 1;
+        }
+
+        int [][] dir = {{1,0},{0,1},{-1,0},{0,-1}};
+
+        while(!pacific.isEmpty()){
+            int [] curr = pacific.poll();
+            int i = curr[0];
+            int j=curr[1];
+
+            for(int d=0; d<4; d++){
+                int new_i = i+dir[d][0];
+                int new_j = j+dir[d][1];
+                if(new_i>-1 && new_i<row && new_j>-1 && new_j<col 
+                && heights[i][j]<=heights[new_i][new_j] && p[new_i][new_j]!=1){
+                    p[new_i][new_j]=1;
+                    pacific.offer(new int[]{new_i,new_j});
+                }
+            }
+
+        }
+
+        List<List<Integer>> ans = new ArrayList<>();
+
+        while(!atlantic.isEmpty()){
+            int [] curr = atlantic.poll();
+            int i = curr[0];
+            int j=curr[1];
+
+            if(a[i][j]==1 && p[i][j]==1) {
+                ans.add(Arrays.asList(i, j));
+            }
+
+            for(int d=0; d<4; d++){
+                int new_i = i+dir[d][0];
+                int new_j = j+dir[d][1];
+                if(new_i>-1 && new_i<row && new_j>-1 && new_j<col 
+                && heights[i][j]<=heights[new_i][new_j] && a[new_i][new_j]!=1){
+
+                    a[new_i][new_j]=1;
+                    atlantic.offer(new int[]{new_i,new_j});
+                }
+
+            }
+
+        }
+
+        return ans;
+    }
+}
