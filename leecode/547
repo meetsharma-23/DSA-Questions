@@ -1,0 +1,33 @@
+class Solution {
+
+    public void bfs(int[][]grid, int i){
+        Queue<Integer> q = new LinkedList<>();
+
+        q.offer(i);
+        while(!q.isEmpty()){
+            int curr = q.poll();
+            for(int idx = 0; idx<grid.length;idx++){
+                if(grid[curr][idx]==1){
+                    grid[curr][idx]=-1;
+                    grid[idx][curr]=-1;
+                    q.offer(idx);
+                }
+            }
+        }
+    }
+
+    public int findCircleNum(int[][] isConnected) {
+        int province=0;
+        int n = isConnected.length;
+        for(int i=0; i<n ;i++){
+            for(int j=0; j<n; j++){
+                if(isConnected[i][j]==1){
+                    bfs(isConnected, i);
+                    province++;
+                }
+            }
+        }
+
+        return province;
+    }
+}
