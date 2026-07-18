@@ -1,0 +1,42 @@
+class Solution {
+    public boolean isValid(int max, int [] arr, int k){
+
+        int subArray=1, sum=0;
+
+        for(int i=0; i<arr.length; i++){
+            if(sum+arr[i]<=max){
+                sum+=arr[i];
+            }
+            else {
+                subArray++;
+                sum=arr[i];
+                if(subArray>k) return false;
+            }
+        }
+
+        return true;
+        
+
+    }
+    public int splitArray(int[] nums, int k) {
+        int n = nums.length;
+        int low = 0, high =0;
+        for(int i=0; i<n; i++){
+            low = Math.max(low,nums[i]);
+            high+=nums[i];
+        }
+        int ans=0;
+
+        while(low<=high){
+            int mid = low+(high-low)/2;
+
+            if(isValid(mid,nums,k)){
+                ans= mid;
+                high=mid-1;
+            }
+            else low=mid+1;
+        }
+
+        return ans;
+    }
+}
