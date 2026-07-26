@@ -1,0 +1,47 @@
+class Solution {
+    int [][] dir = {{0,1,1},{0,-1,2},{1,0,3},{-1,0,4}};
+
+    public int minCost(int[][] grid) {
+        int row = grid.length;
+        int col = grid[0].length;
+
+        int[][] cost = new int[row][col];
+        for(int i=0;i<row; i++){
+            Arrays.fill(cost[i],Integer.MAX_VALUE);
+        }
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)-> a[2]-b[2]);
+        pq.offer(new int[]{0,0,0});
+        cost[0][0]=0;
+
+        while(!pq.isEmpty()){
+            int [] curr = pq.poll();
+            int i= curr[0];
+            int j=curr[1];
+            int c = curr[2];
+
+            if(c>cost[i][j])continue;
+
+            for(int d=0; d<4; d++){
+                int new_i=i+dir[d][0];
+                int new_j = j+dir[d][1];
+
+                if(new_i<0 || new_i>=row || new_j <0 || new_j >=col) continue;
+                if(grid[i][j]==dir[d][2]){
+                    if(cost[new_i][new_j]> c){
+                        cost[new_i][new_j]=c;
+                        pq.offer(new int[]{new_i,new_j,c});
+                    }
+                }
+                else {
+                    if(cost[new_i][new_j]> c+1){
+                        cost[new_i][new_j]=c+1;
+                        pq.offer(new int[]{new_i,new_j,c+1});
+                    }
+                }
+            }
+        }
+
+        return cost[row-1][col-1];
+    }
+}
